@@ -53,9 +53,10 @@ train_data, test_data = train_test_split(df, test_size=0.2, random_state=42)
 
 # Train the model with the training data
 X,Y,options = obtain_data(train_data)
-for i in range(5, 50, 5):
-	print ("Batch size: ", i)
-	theta, _ = logistic_regression(X,Y,optimizer="mini_batch_gradient_descent",batch_size = i)
+epochs = 1
+for i in range(epochs):
+	print ("Epoch nr: ", i)
+	theta, _ = logistic_regression(X,Y,optimizer="mini_batch_gradient_descent",batch_size = 50)
 
 	#test ethe model with the test data
 	X_test,_, _ = obtain_data(test_data, options)
@@ -75,7 +76,7 @@ for i in range(5, 50, 5):
 	print("Confusion Matrix:\n", conf_matrix)
 
 	# Classification Report (Precision, Recall, F1-score)
-	report = classification_report(Y_test, predictions)
+	report = classification_report(Y_test, predictions, zero_division=0)
 	print("Classification Report:\n", report)
 
 # Once everithing seems to be working, train the model with the whole dataset

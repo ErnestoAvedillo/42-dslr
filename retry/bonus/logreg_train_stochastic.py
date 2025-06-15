@@ -53,29 +53,31 @@ train_data, test_data = train_test_split(df, test_size=0.2, random_state=42)
 
 # Train the model with the training data
 X,Y,options = obtain_data(train_data)
+epochs = 1
+for i in range(epochs):
+	print ("Epoch nr: ", i)
+	theta, _ = logistic_regression(X,Y,optimizer="stochastic_gradient_descent")
 
-theta, _ = logistic_regression(X,Y,optimizer="stochastic_gradient_descent")
+	#test ethe model with the test data
+	X,Y, _ = obtain_data(test_data, options)
 
-#test ethe model with the test data
-X,Y, _ = obtain_data(test_data, options)
+	predictions = predict(X, theta,options)
 
-predictions = predict(X, theta,options)
+	Y_test = test_data['Hogwarts House'].to_numpy()
 
-Y = test_data['Hogwarts House'].to_numpy()
+	#review the acuracy, confusion matrix and clasification report of the predictons
 
-#review the acuracy, confusion matrix and clasification report of the predictons
+	# Accuracy
+	accuracy = accuracy_score(Y_test, predictions)
+	print("Accuracy:", accuracy)
 
-# Accuracy
-accuracy = accuracy_score(Y, predictions)
-print("Accuracy:", accuracy)
+	# Confusion Matrix
+	conf_matrix = confusion_matrix(Y_test, predictions)
+	print("Confusion Matrix:\n", conf_matrix)
 
-# Confusion Matrix
-conf_matrix = confusion_matrix(Y, predictions)
-print("Confusion Matrix:\n", conf_matrix)
-
-# Classification Report (Precision, Recall, F1-score)
-report = classification_report(Y, predictions)
-print("Classification Report:\n", report)
+	# Classification Report (Precision, Recall, F1-score)
+	report = classification_report(Y_test, predictions, zero_division=0)
+	print("Classification Report:\n", report)
 
 
 # Once everithing seems to be working, train the model with the whole dataset
